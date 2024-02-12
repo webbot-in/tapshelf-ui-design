@@ -11,13 +11,14 @@ import { useMediaQuery, createTheme } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import GetAppOutlinedIcon from '@mui/icons-material/GetAppOutlined';
 import Navabar from '../Common/Navabar';
-
+import CropFreeOutlinedIcon from '@mui/icons-material/CropFreeOutlined';
 
 const theme = createTheme();
 
 function Inventory() {
   const matchesSM = useMediaQuery(theme.breakpoints.down('md'));
   const [openAddProductDialog, setOpenAddProductDialog] = useState(false)
+  const [image, setImage] = useState(null);
   const [userEnterValue, setUserEnterValue] = useState({
     productName: '',
     productID: '',
@@ -28,13 +29,8 @@ function Inventory() {
     expiryDate: '',
     threshold: ''
   })
-  console.log(userEnterValue)
-
   const [storeProducts, setStoreProducts] = useState([])
-  console.log(storeProducts)
   const uiStoreProducts = [...storeProducts].reverse()
-
-
 
   const overall = [{
     title: 'Categories',
@@ -66,7 +62,6 @@ function Inventory() {
     amount: '2',
     lastTitle: 'Not in stock'
   }]
-
 
   const addProducts = [{
     title: 'Product Name',
@@ -134,6 +129,37 @@ function Inventory() {
     }))
   }]
 
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleBrowseClick = () => {
+    document.getElementById('fileInput').click();
+  };
+
   const addProductBtn = () => {
     const currentDate = dayjs();
     const format = 'DD/MM/YYYY';
@@ -163,6 +189,7 @@ function Inventory() {
         expiryDate: '',
         threshold: ''
       })
+      setImage(null)
       setOpenAddProductDialog(false)
       enqueueSnackbar('Product Added', { variant: 'success', preventDuplicate: true });
     }
@@ -199,8 +226,30 @@ function Inventory() {
     });
   }
 
+  const closeAddProductDialog = () => {
+    setOpenAddProductDialog(false)
+    setUserEnterValue({
+      productName: '',
+      productID: '',
+      category: '',
+      buyingPrice: '',
+      quantity: '',
+      unit: '',
+      expiryDate: '',
+      threshold: ''
+    })
+    setImage(null)
+  }
   useEffect(() => {
     setStoreProducts([{
+      productName: 'Red Bull',
+      buyingPrice: '405',
+      quantity: '36',
+      threshold: '9',
+      expiryDate: '2022-12-05T18:30:00.000Z',
+      availability: 'Out of stock',
+      uniqueID: '2024-02-11T12:46:37.373Z'
+    },{
       productName: 'Bru',
       buyingPrice: '257',
       quantity: '22',
@@ -216,66 +265,9 @@ function Inventory() {
       expiryDate: '2022-12-11T18:30:00.000Z',
       availability: 'In-stock',
       uniqueID: '2024-02-11T12:50:37.373Z'
-    }, {
-      productName: 'Bru',
-      buyingPrice: '257',
-      quantity: '22',
-      threshold: '11',
-      expiryDate: '2022-12-21T18:30:00.000Z',
-      availability: 'Out of stock',
-      uniqueID: '2024-02-11T12:46:37.373Z'
-    }, {
-      productName: 'Maggi',
-      buyingPrice: '430',
-      quantity: '43',
-      threshold: '12',
-      expiryDate: '2022-12-11T18:30:00.000Z',
-      availability: 'In-stock',
-      uniqueID: '2024-02-11T12:50:37.373Z'
-    }, {
-      productName: 'Bru',
-      buyingPrice: '257',
-      quantity: '22',
-      threshold: '11',
-      expiryDate: '2022-12-21T18:30:00.000Z',
-      availability: 'Out of stock',
-      uniqueID: '2024-02-11T12:46:37.373Z'
-    }, {
-      productName: 'Maggi',
-      buyingPrice: '430',
-      quantity: '43',
-      threshold: '12',
-      expiryDate: '2022-12-11T18:30:00.000Z',
-      availability: 'In-stock',
-      uniqueID: '2024-02-11T12:50:37.373Z'
-    }, {
-      productName: 'Bru',
-      buyingPrice: '257',
-      quantity: '22',
-      threshold: '11',
-      expiryDate: '2022-12-21T18:30:00.000Z',
-      availability: 'Out of stock',
-      uniqueID: '2024-02-11T12:46:37.373Z'
-    }, {
-      productName: 'Maggi',
-      buyingPrice: '430',
-      quantity: '43',
-      threshold: '12',
-      expiryDate: '2022-12-11T18:30:00.000Z',
-      availability: 'In-stock',
-      uniqueID: '2024-02-11T12:50:37.373Z'
-    }, {
-      productName: 'Bru',
-      buyingPrice: '257',
-      quantity: '22',
-      threshold: '11',
-      expiryDate: '2022-12-21T18:30:00.000Z',
-      availability: 'Out of stock',
-      uniqueID: '2024-02-11T12:46:37.373Z'
     }
     ])
   }, [])
-
 
 
   return (
@@ -366,6 +358,45 @@ function Inventory() {
 
       <Dialog open={openAddProductDialog} PaperProps={{ sx: { p: 3, borderRadius: '10px' } }}>
         <Typography variant='h5'>New Product</Typography>
+        <Stack
+          direction={'row'}
+          alignItems={'center'}
+          gap={3}
+          justifyContent={'center'}
+          mt={2}
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+        >
+          {image ?
+            <Avatar
+              variant="square"
+              alt="image"
+              src={image}
+              sx={{ width: 100, height: 100 }}
+            /> :
+            <CropFreeOutlinedIcon sx={{ fontSize: 100, color: '#99A0AD' }} />
+          }
+
+          <Stack alignItems={'center'}>
+            <Typography sx={{ color: '#99A0AD' }}>Drag image here</Typography>
+            <Typography sx={{ color: '#99A0AD' }}>or</Typography>
+            <input
+              id="fileInput"
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              style={{ display: 'none' }}
+            />
+            <Typography
+              variant="body1"
+              component="span"
+              onClick={handleBrowseClick}
+              sx={{ cursor: 'pointer', color: '#6CA5F4' }}
+            >
+              Browse image
+            </Typography>
+          </Stack>
+        </Stack>
         {addProducts.map((items, index) => (
           <Stack direction={{ sm: 'row' }} alignItems={{ sm: 'center' }} key={index} mt={2}>
             <Typography sx={{ width: 150 }}>{items.title}</Typography>
@@ -411,7 +442,8 @@ function Inventory() {
           </Stack>
         ))}
         <Stack direction={'row'} gap={3} alignItems={'center'} justifyContent={'flex-end'} mt={3}>
-          <Button variant='outlined' onClick={() => setOpenAddProductDialog(false)} sx={{ textTransform: 'capitalize', color: '#A6ACB8', borderColor: '#A6ACB8', ':hover': { borderColor: '#A6ACB8' } }}>Discard</Button>
+          <Button variant='outlined' onClick={closeAddProductDialog}
+            sx={{ textTransform: 'capitalize', color: '#A6ACB8', borderColor: '#A6ACB8', ':hover': { borderColor: '#A6ACB8' } }}>Discard</Button>
           <Button variant='contained' onClick={addProductBtn} sx={{ textTransform: 'capitalize', bgcolor: '#1366D9', ':hover': { bgcolor: '#1366D9' } }}>Add Product</Button>
         </Stack>
       </Dialog >

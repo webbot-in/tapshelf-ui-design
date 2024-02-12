@@ -20,6 +20,7 @@ import SettingsIconBlue from './images/blueicons/settingsblue.png'
 import LogoutIconBlue from './images/blueicons/logoutblue.png'
 import CloseIcon from '@mui/icons-material/Close';
 import { useMediaQuery, createTheme } from '@mui/material';
+import { enqueueSnackbar } from 'notistack'
 
 const theme = createTheme();
 
@@ -35,7 +36,6 @@ function DrawerLeft(props) {
         '4': '/orders',
         '5': '/managestore',
         '6': '/settings',
-        '7': '/logout'
     }
     const navigate = useNavigate()
     const MenuItemsList = [
@@ -77,7 +77,7 @@ function DrawerLeft(props) {
         {
             text: "Log Out",
             icon: window.location.pathname === paths['7'] ? LogoutIconBlue : LogoutIconBlack,
-            reDirect: () => navigate(paths['7'])
+            reDirect: () => enqueueSnackbar('No Logout', { variant: 'error', preventDuplicate: true })
         }
     ];
 

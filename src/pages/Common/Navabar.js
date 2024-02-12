@@ -13,6 +13,7 @@ function Navabar() {
         setOpenDrawer(false)
         console.log('call drawer fn')
     }
+
     return (
         <>
             <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'} sx={{ ml: { md: '200px', lg: "250px" }, mr: { md: '15px', lg: '25px' } }}>
