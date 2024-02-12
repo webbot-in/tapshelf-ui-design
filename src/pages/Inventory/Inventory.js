@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import CloseIcon from '@mui/icons-material/Close';
-import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
-import { Box, Button, Typography, Drawer, List, ListItem, ListItemButton, Stack, Avatar, TextField, Card, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Dialog } from '@mui/material';
-import LadyProfile from '../Common/images/ladyprofile.jpg'
-import InputAdornment from '@mui/material/InputAdornment';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import { Box, Button, Typography, Drawer, List, ListItem, ListItemButton, Stack, Avatar, TextField, Card, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Dialog, Tooltip } from '@mui/material';
 import FilterListOutlinedIcon from '@mui/icons-material/FilterListOutlined';
 import { enqueueSnackbar } from 'notistack';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -14,10 +7,10 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import Swal from 'sweetalert2'
-import DrawerLeft from '../Common/DrawerLeft';
 import { useMediaQuery, createTheme } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import GetAppOutlinedIcon from '@mui/icons-material/GetAppOutlined';
+import Navabar from '../Common/Navabar';
 
 
 const theme = createTheme();
@@ -25,8 +18,6 @@ const theme = createTheme();
 function Inventory() {
   const matchesSM = useMediaQuery(theme.breakpoints.down('md'));
   const [openAddProductDialog, setOpenAddProductDialog] = useState(false)
-  const [openDrawer, setOpenDrawer] = useState(false)
-  console.log(openDrawer)
   const [userEnterValue, setUserEnterValue] = useState({
     productName: '',
     productID: '',
@@ -285,33 +276,13 @@ function Inventory() {
     ])
   }, [])
 
-  const closeDrawer = () => {
-    setOpenDrawer(false)
-    console.log('call drawer fn')
-  }
+
 
   return (
     <>
       <Stack alignItems={'center'}>
         <Box elevation={0} sx={{ width: { xs: '95%', md: '100%' }, pt: 2 }}>
-          <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'} sx={{ ml: { md: '200px', lg: "250px" }, mr: { md: '15px', lg: '25px' } }}>
-            <MenuIcon onClick={() => setOpenDrawer(true)} sx={{ display: { md: 'none' } }} />
-            <TextField
-              placeholder='Search product, supplier, order'
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchOutlinedIcon />
-                  </InputAdornment>
-                ),
-              }}
-              size='small' sx={{ width: { xs: 250, md: 300 } }} />
-            <Stack direction={'row'} alignItems={'center'} gap={{ xs: 2, md: 3 }}>
-              <NotificationsNoneOutlinedIcon />
-              <Avatar src={LadyProfile} />
-            </Stack>
-          </Stack>
-
+          <Navabar />
           <Box sx={{ mt: 1.5, bgcolor: '#E6E8EC', }}>
             <Box sx={{ ml: { md: '200px', lg: "250px" }, mr: { md: '15px', lg: '25px' }, pt: 1.5, pb: 2 }}>
               <Card sx={{ p: 2, borderRadius: '10px' }}>
@@ -361,20 +332,22 @@ function Inventory() {
                     </TableHead>
                     <TableBody>
                       {uiStoreProducts.map((row, index) => (
-                        <TableRow
-                          key={index}
-                          sx={{ cursor: 'pointer' }}
-                          onClick={() => deleteFn(row.uniqueID)}
-                        >
-                          <TableCell component="th" scope="row">
-                            {row.productName.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-                          </TableCell>
-                          <TableCell>{`₹${row.buyingPrice}`}</TableCell>
-                          <TableCell>{`${row.quantity} Packets`}</TableCell>
-                          <TableCell>{`${row.threshold} Packets`}</TableCell>
-                          <TableCell>{filterDate(row.expiryDate)}</TableCell>
-                          <TableCell sx={{ color: row.availability === 'In-stock' ? '#3EB87F' : '#E1655C' }}>{row.availability}</TableCell>
-                        </TableRow>
+                        <Tooltip title="Click to Delete Product">
+                          <TableRow
+                            key={index}
+                            sx={{ cursor: 'pointer', ':hover': { bgcolor: '#F1F2F4' } }}
+                            onClick={() => deleteFn(row.uniqueID)}
+                          >
+                            <TableCell component="th" scope="row">
+                              {row.productName.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                            </TableCell>
+                            <TableCell>{`₹${row.buyingPrice}`}</TableCell>
+                            <TableCell>{`${row.quantity} Packets`}</TableCell>
+                            <TableCell>{`${row.threshold} Packets`}</TableCell>
+                            <TableCell>{filterDate(row.expiryDate)}</TableCell>
+                            <TableCell sx={{ color: row.availability === 'In-stock' ? '#3EB87F' : '#E1655C' }}>{row.availability}</TableCell>
+                          </TableRow>
+                        </Tooltip>
                       ))}
                     </TableBody>
                   </Table>
@@ -390,7 +363,6 @@ function Inventory() {
         </Box>
       </Stack>
 
-      <DrawerLeft openDrawer={openDrawer} closeDrawer={closeDrawer} />
 
       <Dialog open={openAddProductDialog} PaperProps={{ sx: { p: 3, borderRadius: '10px' } }}>
         <Typography variant='h5'>New Product</Typography>

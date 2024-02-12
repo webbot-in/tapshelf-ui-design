@@ -18,7 +18,7 @@ function App() {
         <Route path='/orders' element={<Orders />}></Route>
         <Route path='/managestore' element={<ManageStore />}></Route>
         <Route path='/settings' element={<Settings />}></Route>
-        {/* <Route path='*' element={<PageNotFound />} /> */}
+        <Route path='*' element={<Inventory />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,16 +1,18 @@
 import { Box, Stack, Typography } from '@mui/material'
 import React from 'react'
-import DrawerLeft from '../Common/DrawerLeft'
+import Navabar from '../Common/Navabar'
 
 function ManageStore() {
     return (
         <>
-            <Box elevation={0} sx={{ width: "100%", pt: 2 }}>
-                <Stack direction={'row'} justifyContent={'center'} alignItems={'center'} sx={{ ml: "250px", mr: '25px', height: '90vh' }}>
-                    <Typography variant='h6'>Manage Store</Typography>
-                </Stack>
-            </Box>
-            <DrawerLeft />
+            <Stack alignItems={'center'}>
+                <Box elevation={0} sx={{ width: { xs: '95%', md: '100%' }, pt: 2 }}>
+                    <Navabar />
+                    <Stack direction={'row'} justifyContent={'center'} alignItems={'center'} sx={{ ml: { md: '200px', lg: "250px" }, mr: { md: '15px', lg: '25px' }, height: '90vh' }}>
+                        <Typography variant='h6'>Manage Store</Typography>
+                    </Stack>
+                </Box>
+            </Stack>
         </>
     )
 }
