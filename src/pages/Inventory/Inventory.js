@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Typography, Drawer, List, ListItem, ListItemButton, Stack, Avatar, TextField, Card, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Dialog, Tooltip, InputAdornment } from '@mui/material';
+import { Box, Button, Typography, Stack, Avatar, TextField, Card, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Dialog, Tooltip } from '@mui/material';
 import FilterListOutlinedIcon from '@mui/icons-material/FilterListOutlined';
 import { enqueueSnackbar } from 'notistack';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -12,7 +12,6 @@ import AddIcon from '@mui/icons-material/Add';
 import GetAppOutlinedIcon from '@mui/icons-material/GetAppOutlined';
 import Navabar from '../Common/Navabar';
 import CropFreeOutlinedIcon from '@mui/icons-material/CropFreeOutlined';
-import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 
 const theme = createTheme();
 
@@ -182,7 +181,7 @@ function Inventory() {
       const currentDate = new Date()
       const storeNewProduct = {
         ...userEnterValue,
-        availability: userEnterValue.quantity > userEnterValue.threshold  ? 'In- stock' : userEnterValue.quantity === '0' ? 'Out of stock' : 'Low stock',
+        availability: userEnterValue.quantity > userEnterValue.threshold ? 'In- stock' : userEnterValue.quantity === '0' ? 'Out of stock' : 'Low stock',
         uniqueID: currentDate
       }
       setStoreProducts([...storeProducts, storeNewProduct])
