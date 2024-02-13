@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Typography, Drawer, List, ListItem, ListItemButton, Stack, Avatar, TextField, Card, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Dialog, Tooltip } from '@mui/material';
+import { Box, Button, Typography, Drawer, List, ListItem, ListItemButton, Stack, Avatar, TextField, Card, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Dialog, Tooltip, InputAdornment } from '@mui/material';
 import FilterListOutlinedIcon from '@mui/icons-material/FilterListOutlined';
 import { enqueueSnackbar } from 'notistack';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -12,6 +12,7 @@ import AddIcon from '@mui/icons-material/Add';
 import GetAppOutlinedIcon from '@mui/icons-material/GetAppOutlined';
 import Navabar from '../Common/Navabar';
 import CropFreeOutlinedIcon from '@mui/icons-material/CropFreeOutlined';
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 
 const theme = createTheme();
 
@@ -30,7 +31,15 @@ function Inventory() {
     threshold: ''
   })
   const [storeProducts, setStoreProducts] = useState([])
-  const uiStoreProducts = [...storeProducts].reverse()
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 9;
+  const lastIndex = currentPage * recordsPerPage;
+  console.log(lastIndex);
+  const firstIndex = lastIndex - recordsPerPage;
+  console.log('history', firstIndex);
+  const reversedArray = [...storeProducts].reverse()
+  const uiStoreProducts = reversedArray.slice(firstIndex, lastIndex);
+  const npage = Math.ceil(storeProducts.length / recordsPerPage);
 
   const overall = [{
     title: 'Categories',
@@ -81,7 +90,7 @@ function Inventory() {
     }))
   }, {
     title: 'Category',
-    placeholder: 'Select Product category',
+    placeholder: 'Select product category',
     value: userEnterValue.category,
     onChangeFn: (e) => setUserEnterValue((pre) => ({
       ...pre,
@@ -164,18 +173,16 @@ function Inventory() {
     const currentDate = dayjs();
     const format = 'DD/MM/YYYY';
     if (Object.values(userEnterValue).includes('')) {
-      enqueueSnackbar('Enter All Filled', { variant: 'error', preventDuplicate: true });
+      enqueueSnackbar('Please enter all fields', { variant: 'error', preventDuplicate: true });
     }
     else if (dayjs(userEnterValue.expiryDate, format).isBefore(dayjs(currentDate, format))) {
-      enqueueSnackbar('Enter Correct Date', { variant: 'error', preventDuplicate: true });
+      enqueueSnackbar('Please enter a valid expiry date', { variant: 'error', preventDuplicate: true });
     }
     else {
       const currentDate = new Date()
-      const stackSelection = ['In-stock', 'Out of stock'];
-      const randomIndex = Math.floor(Math.random() * stackSelection.length);
       const storeNewProduct = {
         ...userEnterValue,
-        availability: stackSelection[randomIndex],
+        availability: userEnterValue.quantity > userEnterValue.threshold  ? 'In- stock' : userEnterValue.quantity === '0' ? 'Out of stock' : 'Low stock',
         uniqueID: currentDate
       }
       setStoreProducts([...storeProducts, storeNewProduct])
@@ -197,7 +204,7 @@ function Inventory() {
 
   const filterDate = (val) => {
     const a = new Date(val);
-    const final = `${a.getDate().toString().padStart(2, '0')}/${(a.getMonth() + 1).toString()}/${a
+    const final = `${a.getDate().toString()}/${(a.getMonth() + 1).toString()}/${a
       .getFullYear()
       .toString().slice(2)}`;
 
@@ -242,30 +249,87 @@ function Inventory() {
   }
   useEffect(() => {
     setStoreProducts([{
+      productName: 'Coca cola',
+      buyingPrice: '205',
+      quantity: '41',
+      unit: 'Packets',
+      threshold: '10',
+      expiryDate: '2022-11-11T16:30:00.000Z',
+      availability: 'Low stock',
+      uniqueID: '2024-02-11T12:54:37.373Z'
+    }, {
+      productName: 'Scotch Brite',
+      buyingPrice: '359',
+      quantity: '43',
+      unit: 'Packets',
+      threshold: '8',
+      expiryDate: '2023-06-06T16:30:00.000Z',
+      availability: 'In- stock',
+      uniqueID: '2024-02-11T12:53:37.373Z'
+    }, {
+      productName: 'Ariel',
+      buyingPrice: '408',
+      quantity: '23',
+      unit: 'Packets',
+      threshold: '7',
+      expiryDate: '2023-12-15T16:30:00.000Z',
+      availability: 'Out of stock',
+      uniqueID: '2024-02-11T12:52:37.373Z'
+    }, {
+      productName: 'Harpic',
+      buyingPrice: '605',
+      quantity: '10',
+      unit: 'Packets',
+      threshold: '5',
+      expiryDate: '2023-01-09T16:30:00.000Z',
+      availability: 'In- stock',
+      uniqueID: '2024-02-11T12:51:37.373Z'
+    }, {
+      productName: 'Horlicks',
+      buyingPrice: '530',
+      quantity: '5',
+      unit: 'Packets',
+      threshold: '5',
+      expiryDate: '2023-01-09T16:30:00.000Z',
+      availability: 'In- stock',
+      uniqueID: '2024-02-11T12:50:37.373Z'
+    }, {
+      productName: 'Bourn Vita',
+      buyingPrice: '502',
+      quantity: '14',
+      unit: 'Packets',
+      threshold: '6',
+      expiryDate: '2022-12-08T16:30:00.000Z',
+      availability: 'Out of stock',
+      uniqueID: '2024-02-11T12:49:37.373Z'
+    }, {
       productName: 'Red Bull',
       buyingPrice: '405',
       quantity: '36',
+      unit: 'Packets',
       threshold: '9',
-      expiryDate: '2022-12-05T18:30:00.000Z',
-      availability: 'Out of stock',
-      uniqueID: '2024-02-11T12:46:37.373Z'
-    },{
+      expiryDate: '2022-12-05T16:30:00.000Z',
+      availability: 'In- stock',
+      uniqueID: '2024-02-11T12:48:37.373Z'
+    }, {
       productName: 'Bru',
       buyingPrice: '257',
       quantity: '22',
+      unit: 'Packets',
       threshold: '11',
-      expiryDate: '2022-12-21T18:30:00.000Z',
+      expiryDate: '2022-12-21T16:30:00.000Z',
       availability: 'Out of stock',
-      uniqueID: '2024-02-11T12:46:37.373Z'
+      uniqueID: '2024-02-11T12:47:37.373Z'
     }, {
       productName: 'Maggi',
       buyingPrice: '430',
       quantity: '43',
+      unit: 'Packets',
       threshold: '12',
-      expiryDate: '2022-12-11T18:30:00.000Z',
-      availability: 'In-stock',
-      uniqueID: '2024-02-11T12:50:37.373Z'
-    }
+      expiryDate: '2022-12-11T16:30:00.000Z',
+      availability: 'In- stock',
+      uniqueID: '2024-02-11T12:46:37.373Z'
+    },
     ])
   }, [])
 
@@ -331,13 +395,13 @@ function Inventory() {
                             onClick={() => deleteFn(row.uniqueID)}
                           >
                             <TableCell component="th" scope="row">
-                              {row.productName.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                              {row.productName.charAt(0).toUpperCase() + row.productName.slice(1)}
                             </TableCell>
                             <TableCell>{`₹${row.buyingPrice}`}</TableCell>
-                            <TableCell>{`${row.quantity} Packets`}</TableCell>
-                            <TableCell>{`${row.threshold} Packets`}</TableCell>
+                            <TableCell>{`${row.quantity} ${row.unit}`}</TableCell>
+                            <TableCell>{`${row.threshold} ${row.unit}`}</TableCell>
                             <TableCell>{filterDate(row.expiryDate)}</TableCell>
-                            <TableCell sx={{ color: row.availability === 'In-stock' ? '#3EB87F' : '#E1655C' }}>{row.availability}</TableCell>
+                            <TableCell sx={{ color: row.availability === 'In- stock' ? '#3EB87F' : row.availability === 'Low stock' ? '#E7A75B' : '#E1655C' }}>{row.availability}</TableCell>
                           </TableRow>
                         </Tooltip>
                       ))}
@@ -345,9 +409,9 @@ function Inventory() {
                   </Table>
                 </TableContainer>
                 <Stack direction={'row'} justifyContent={'space-between'} sx={{ p: 2 }}>
-                  <Button size='small' variant='outlined' sx={{ textTransform: 'capitalize', color: '#707680', borderColor: '#707680', ':hover': { borderColor: '#707680' } }}>Previous</Button>
-                  <Typography sx={{ color: '#6F7580' }}>Page 1 of 10</Typography>
-                  <Button size='small' variant='outlined' sx={{ textTransform: 'capitalize', color: '#707680', borderColor: '#707680', ':hover': { borderColor: '#707680' } }}>Next</Button>
+                  <Button size='small' variant='outlined' onClick={() => currentPage !== 1 && setCurrentPage(currentPage - 1)} sx={{ textTransform: 'capitalize', color: '#707680', borderColor: '#707680', ':hover': { borderColor: '#707680' } }}>Previous</Button>
+                  <Typography sx={{ color: '#6F7580' }}>Page {currentPage} of {npage}</Typography>
+                  <Button size='small' variant='outlined' onClick={() => currentPage !== npage && setCurrentPage(currentPage + 1)} sx={{ textTransform: 'capitalize', color: '#707680', borderColor: '#707680', ':hover': { borderColor: '#707680' } }}>Next</Button>
                 </Stack>
               </Card>
             </Box>
@@ -403,9 +467,9 @@ function Inventory() {
             {index !== 6 ?
               <TextField
                 size='small'
-                type={index === 0 || index === 1 || index === 2 ? 'text' : 'number'}
+                type={index === 0 || index === 1 || index === 2 || index === 5 ? 'text' : 'number'}
                 onInput={
-                  index === 0 || index === 1 || index === 2
+                  index === 0 || index === 1 || index === 2 || index === 5
                     ?
                     (e) => e.target.value
                     :

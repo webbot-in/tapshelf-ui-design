@@ -6,6 +6,7 @@ import Suppliers from './pages/Suppliers/Suppliers';
 import Orders from './pages/Orders/Orders';
 import ManageStore from './pages/ManageStore/ManageStore';
 import Settings from './pages/Settings/Settings';
+import PageNotFound from './pages/Common/PageNotFound';
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
         <Route path='/orders' element={<Orders />}></Route>
         <Route path='/managestore' element={<ManageStore />}></Route>
         <Route path='/settings' element={<Settings />}></Route>
-        <Route path='*' element={<Inventory />} />
+        <Route path='*' element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
   );
