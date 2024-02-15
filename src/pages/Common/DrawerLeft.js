@@ -26,8 +26,6 @@ const theme = createTheme();
 
 function DrawerLeft(props) {
     const matchesMD = useMediaQuery(theme.breakpoints.down('md'));
-
-    console.log(window.location.pathname)
     const paths = {
         '0': '/dashboard',
         '1': '/',

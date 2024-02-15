@@ -33,9 +33,7 @@ function Inventory() {
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 9;
   const lastIndex = currentPage * recordsPerPage;
-  console.log(lastIndex);
   const firstIndex = lastIndex - recordsPerPage;
-  console.log('history', firstIndex);
   const reversedArray = [...storeProducts].reverse()
   const uiStoreProducts = reversedArray.slice(firstIndex, lastIndex);
   const npage = Math.ceil(storeProducts.length / recordsPerPage);
@@ -220,7 +218,6 @@ function Inventory() {
       confirmButtonText: "Yes, delete it!"
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log(getUniqueID)
         const filteredArray = storeProducts.filter(obj => obj.uniqueID !== getUniqueID);
         setStoreProducts(filteredArray)
         Swal.fire({

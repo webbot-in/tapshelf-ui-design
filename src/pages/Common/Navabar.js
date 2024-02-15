@@ -8,10 +8,8 @@ import LadyProfile from './images/ladyprofile.jpg'
 
 function Navabar() {
     const [openDrawer, setOpenDrawer] = useState(false)
-    console.log(openDrawer)
     const closeDrawer = () => {
         setOpenDrawer(false)
-        console.log('call drawer fn')
     }
 
     return (
