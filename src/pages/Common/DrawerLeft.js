@@ -8,7 +8,6 @@ import SuppliersIconBlack from './images/blackicons/suppliersblack.png'
 import OrdersIconBlack from './images/blackicons/ordersblack.png'
 import ManageStoreIconBlack from './images/blackicons/managestoreblack.png'
 import SettingsIconBlack from './images/blackicons/settingsblack.png'
-import LogoutIconBlack from './images/blackicons/logoutblack.png'
 
 import DashboardIconBlue from './images/blueicons/dashboardblue.png'
 import InventoryIconBlue from './images/blueicons/inventoryblue.png'
@@ -17,10 +16,8 @@ import SuppliersIconBlue from './images/blueicons/suppliersblue.png'
 import OrdersIconBlue from './images/blueicons/ordersblue.png'
 import ManageStoreIconBlue from './images/blueicons/managestoreblue.png'
 import SettingsIconBlue from './images/blueicons/settingsblue.png'
-import LogoutIconBlue from './images/blueicons/logoutblue.png'
 import CloseIcon from '@mui/icons-material/Close';
 import { useMediaQuery, createTheme } from '@mui/material';
-import { enqueueSnackbar } from 'notistack'
 
 const theme = createTheme();
 
@@ -28,7 +25,7 @@ function DrawerLeft(props) {
     const matchesMD = useMediaQuery(theme.breakpoints.down('md'));
     const paths = {
         '0': '/dashboard',
-        '1': '/',
+        '1': '/inventory',
         '2': '/reports',
         '3': '/suppliers',
         '4': '/orders',
@@ -71,13 +68,9 @@ function DrawerLeft(props) {
             text: "Settings",
             icon: window.location.pathname === paths['6'] ? SettingsIconBlue : SettingsIconBlack,
             reDirect: () => navigate(paths['6'])
-        },
-        {
-            text: "Log Out",
-            icon: window.location.pathname === paths['7'] ? LogoutIconBlue : LogoutIconBlack,
-            reDirect: () => enqueueSnackbar('No Logout', { variant: 'error', preventDuplicate: true })
         }
     ];
+    
 
     return (
         <Drawer
