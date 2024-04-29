@@ -95,11 +95,11 @@ function Login() {
     return (
         <>
             <Stack alignItems={'center'} justifyContent={'center'} sx={{ height: '100vh' }}>
-                <Card sx={{ borderRadius: '10px' }}>
+                <Card sx={{ borderRadius: '10px' }} elevation={15}>
                     <Stack gap={2} alignItems={'center'} justifyContent={'center'} sx={{ mx: 2, mb: 2, width: { xs: 'initial', md: 300, height: 300 } }}>
                         <h1>Login</h1>
                         {textFieldList.map((items, index) => (
-                            <TextField key={index} fullWidth placeholder={items.placeHolder} size='small' value={items.value} error={items.error} helperText={items.helperTxt} onKeyPress={(e) => e.key === 'Enter' && loginFn()} onChange={items.onChangeFn} />
+                            <TextField key={index} autoFocus={index === 0} fullWidth placeholder={items.placeHolder} size='small' value={items.value} error={items.error} helperText={items.helperTxt} onKeyPress={(e) => e.key === 'Enter' && loginFn()} onChange={items.onChangeFn} />
                         ))}
                         <Button variant='contained' disabled={loading} fullWidth onClick={loginFn} sx={{ bgcolor: loading ? 'white' : 'black', ":hover": { bgcolor: loading ? 'white' : 'black' } }}>{loading ? 'Logging in...' : 'Login'}</Button>
                         <Typography onClick={signUpFn} sx={{ textDecoration: 'underline', cursor: 'pointer', "::selection": { userSelect: 'none' } }}>Signup</Typography>

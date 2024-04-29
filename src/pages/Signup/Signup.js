@@ -160,17 +160,17 @@ function Signup() {
     return (
         <>
             <Stack alignItems={'center'} justifyContent={'center'} sx={{ height: '100vh' }}>
-                <Card sx={{ borderRadius: '10px' }}>
+                <Card elevation={15} sx={{ borderRadius: '10px' }}>
                     <Stack gap={2} alignItems={'center'} justifyContent={'center'} sx={{ mx: 2, mb: 2, width: { xs: 'initial', md: 500 } }}>
                         <h1>Signup</h1>
                         {textFieldList.map((items, index) => (
                             index !== 5 ?
                                 <TextField
                                     key={index}
-                                    type={index === 6 || index === 8 ? 'number' : 'text'}
+                                    type={index === 6 ? 'number' : 'text'}
                                     onKeyPress={(e) => e.key === 'Enter' && signUpFn()}
                                     onInput={
-                                        index === 4 || index === 6 || index === 8
+                                        index === 4 || index === 6
                                             ?
                                             (e) => (e.target.value = e.target.value.slice(0, 15))
                                             :
